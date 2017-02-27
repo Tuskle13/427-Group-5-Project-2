@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerContoller : MonoBehaviour {
 
-    public float maxSpeed = 2f;
-    bool grounded = true;
+    public float maxSpeed = 5f;
+    bool grounded = false;
+    float groundRadius = 0.2f;
+    public float jumpForce = 300f;
 
     public Transform groundCheck;
-    float groundRadius = 0.2f;
     public LayerMask whatIsGround;
-    public float jumpForce = 500f;
 
     Animator animator;
     Rigidbody2D rigidBody;
@@ -18,7 +18,7 @@ public class PlayerContoller : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         rigidBody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -30,12 +30,18 @@ public class PlayerContoller : MonoBehaviour {
 
         if (movement < 0 && !spriteRenderer.flipX) Flip();
         else if (movement > 0 && spriteRenderer.flipX) Flip();
+
+        animator.SetFloat("Speed", Mathf.Abs(movement));
+        animator.SetFloat("VSpeed", rigidBody.velocity.y);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        animator.SetBool("Grounded", grounded);
     }
 
     // Update is called once per frame
     void Update() {
         if(grounded && Input.GetKeyDown(KeyCode.Space))
         {
+            animator.SetBool("Grounded", false);
             rigidBody.AddForce(new Vector2(0, jumpForce));
         }
     }
