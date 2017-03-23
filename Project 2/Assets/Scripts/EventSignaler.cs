@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.IO;
+using System.Text;
+using System;
 
 public class EventSignaler : MonoBehaviour {
     public int secPerBeat = 1;
@@ -10,7 +13,7 @@ public class EventSignaler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+		readFile("myFile");
 	}
 	
 	// Update is called once per frame
@@ -55,5 +58,28 @@ public class EventSignaler : MonoBehaviour {
             EventJ.Invoke();
         if (Input.GetKeyDown(KeyCode.K))
             EventK.Invoke();
+    }
+
+    void readFile(string fileName){
+        int msTillLoopStarts;
+        int bpm;
+        string timeMeasure;
+        string notes;
+        
+        try{
+            string line;
+            StreamReader reader = new StreamReader(fileName, Encoding.Default);
+            using (reader){
+                
+                msTillLoopStarts = int.Parse(reader.ReadLine());
+                bpm = int.Parse(reader.ReadLine());
+                timeMeasure = reader.ReadLine();
+                notes = reader.ReadLine();
+
+                reader.Close();
+            }
+        } catch(Exception e){
+            Debug.Log(e);
+        }
     }
 }
