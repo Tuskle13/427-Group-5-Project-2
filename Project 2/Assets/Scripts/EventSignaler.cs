@@ -11,18 +11,20 @@ public class EventSignaler : MonoBehaviour {
     public UnityEvent Event1, Event2, Event3, Event4, Event5, Event6, Event7, Event8, Event9,
         EventA, EventB, EventC, EventD, EventE, EventF, EventG, EventH, EventI, EventJ, EventK;    //We can use this to signal to all platforms when theres a switch
 
+    public AudioSource loop;
+
     private int msTillLoopStarts = 0;
     private int bpm = 0;
     private string timeMeasure = "";
     private string notes = "";
     private bool paused = true;
-    private int i = 0;
+    private int currentNote = 0;
 
     // Use this for initialization
     void Start () {
 		readFile("A_Fifth_of_Beethoven_Rhythm_File.txt");
-        i = notes.Length - 1;
-        Invoke("pause", msTillLoopStarts/1000);
+        currentNote = notes.Length - 1;
+        Invoke("pause", msTillLoopStarts/1000f);
 	}
 	
 	// Update is called once per frame
@@ -30,12 +32,11 @@ public class EventSignaler : MonoBehaviour {
         if(!paused){
             paused = true;
 
-            signal (notes[i]);
-            if(i == notes.Length - 1) i = -1;
-            i++;
-            if(i == notes.Length - 1) i = 0;
-            Debug.Log(i);
-            signal (notes[i]);
+            signal (notes[currentNote]);
+            if(currentNote == notes.Length - 1) currentNote = -1;
+            currentNote++;
+            if(currentNote == notes.Length - 1) currentNote = 0;
+            signal (notes[currentNote]);
 
             Invoke("pause", 2);
         }
@@ -60,6 +61,11 @@ public class EventSignaler : MonoBehaviour {
 
     void pause(){
         paused = !paused;
+        if(!loop.isPlaying) loop.Play();
+    }
+
+    void startAudioLoop(){
+
     }
 
     void signal(char c){
@@ -67,7 +73,6 @@ public class EventSignaler : MonoBehaviour {
             case '0':
                 break;
             case '1':
-                Debug.Log("got called?");
                 Event1.Invoke();
                 break;
             case '2':
