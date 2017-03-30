@@ -19,6 +19,7 @@ public class EventSignaler : MonoBehaviour {
     private string notes = "";
     private bool paused = true;
     private int currentNote = 0;
+    private float msForNote = 0;
 
     // Use this for initialization
     void Start () {
@@ -38,7 +39,7 @@ public class EventSignaler : MonoBehaviour {
             if(currentNote == notes.Length - 1) currentNote = 0;
             signal (notes[currentNote]);
 
-            Invoke("pause", 2);
+            Invoke("pause", msForNote/1000f);
         }
     }
 
@@ -74,6 +75,7 @@ public class EventSignaler : MonoBehaviour {
                 break;
             case '1':
                 Event1.Invoke();
+                msForNote = 137.61f;
                 break;
             case '2':
                 Event2.Invoke();
@@ -104,9 +106,11 @@ public class EventSignaler : MonoBehaviour {
                 break;
             case 'b':
                 EventB.Invoke();
+                msForNote = 550.46f;
                 break;
             case 'c':
                 EventC.Invoke();
+                msForNote = 275.23f;
                 break;
             case 'd':
                 EventD.Invoke();
@@ -125,6 +129,7 @@ public class EventSignaler : MonoBehaviour {
                 break;
             case 'i':
                 EventI.Invoke();
+                msForNote = 550.46f;
                 break;
             case 'j':
                 EventJ.Invoke();
