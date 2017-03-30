@@ -11,64 +11,39 @@ public class EventSignaler : MonoBehaviour {
     public UnityEvent Event1, Event2, Event3, Event4, Event5, Event6, Event7, Event8, Event9,
         EventA, EventB, EventC, EventD, EventE, EventF, EventG, EventH, EventI, EventJ, EventK;    //We can use this to signal to all platforms when theres a switch
 
+    private int msTillLoopStarts = 0;
+    private int bpm = 0;
+    private string timeMeasure = "";
+    private string notes = "";
+    private bool paused = true;
+    private int i = 0;
+
     // Use this for initialization
     void Start () {
-		readFile("myFile");
+		readFile("A_Fifth_of_Beethoven_Rhythm_File.txt");
+        i = notes.Length - 1;
+        Invoke("pause", msTillLoopStarts/1000);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Alpha1))    //for testing the event system
-            Event1.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            Event2.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            Event3.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            Event4.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            Event5.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-            Event6.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-            Event7.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-            Event8.Invoke();
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-            Event9.Invoke();
-        if (Input.GetKeyDown(KeyCode.A))
-            EventA.Invoke();
-        if (Input.GetKeyDown(KeyCode.B))
-            EventB.Invoke();
-        if (Input.GetKeyDown(KeyCode.C))
-            EventC.Invoke();
-        if (Input.GetKeyDown(KeyCode.D))
-            EventD.Invoke();
-        if (Input.GetKeyDown(KeyCode.E))
-            EventE.Invoke();
-        if (Input.GetKeyDown(KeyCode.F))
-            EventF.Invoke();
-        if (Input.GetKeyDown(KeyCode.G))
-            EventG.Invoke();
-        if (Input.GetKeyDown(KeyCode.H))
-            EventH.Invoke();
-        if (Input.GetKeyDown(KeyCode.I))
-            EventI.Invoke();
-        if (Input.GetKeyDown(KeyCode.J))
-            EventJ.Invoke();
-        if (Input.GetKeyDown(KeyCode.K))
-            EventK.Invoke();
+        if(!paused){
+            paused = true;
+
+            signal (notes[i]);
+            if(i == notes.Length - 1) i = -1;
+            i++;
+            if(i == notes.Length - 1) i = 0;
+            Debug.Log(i);
+            signal (notes[i]);
+
+            Invoke("pause", 2);
+        }
     }
 
     void readFile(string fileName){
-        int msTillLoopStarts;
-        int bpm;
-        string timeMeasure;
-        string notes;
-        
         try{
-            string line;
-            StreamReader reader = new StreamReader(fileName, Encoding.Default);
+            StreamReader reader = new StreamReader("Assets/Files/" + fileName, Encoding.Default);
             using (reader){
                 
                 msTillLoopStarts = int.Parse(reader.ReadLine());
@@ -80,6 +55,78 @@ public class EventSignaler : MonoBehaviour {
             }
         } catch(Exception e){
             Debug.Log(e);
+        }
+    }
+
+    void pause(){
+        paused = !paused;
+    }
+
+    void signal(char c){
+        switch (c){
+            case '0':
+                break;
+            case '1':
+                Debug.Log("got called?");
+                Event1.Invoke();
+                break;
+            case '2':
+                Event2.Invoke();
+                break;
+            case '3':
+                Event3.Invoke();
+                break;
+            case '4':
+                Event4.Invoke();
+                break;
+            case '5':
+                Event5.Invoke();
+                break;
+            case '6':
+                Event6.Invoke();
+                break;
+            case '7':
+                Event7.Invoke();
+                break;
+            case '8':
+                Event8.Invoke();
+                break;
+            case '9':
+                Event9.Invoke();
+                break;
+            case 'a':
+                EventA.Invoke();
+                break;
+            case 'b':
+                EventB.Invoke();
+                break;
+            case 'c':
+                EventC.Invoke();
+                break;
+            case 'd':
+                EventD.Invoke();
+                break;
+            case 'e':
+                EventE.Invoke();
+                break;
+            case 'f':
+                EventF.Invoke();
+                break;
+            case 'g':
+                EventG.Invoke();
+                break;
+            case 'h':
+                EventH.Invoke();
+                break;
+            case 'i':
+                EventI.Invoke();
+                break;
+            case 'j':
+                EventJ.Invoke();
+                break;
+            case 'k':
+                EventK.Invoke();
+                break;
         }
     }
 }
